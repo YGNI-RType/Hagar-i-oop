@@ -11,9 +11,9 @@
 
 namespace hiop::component {
     struct Cell : gengine::Component<Cell> {
-        uint16_t size;
+        float size;
 
-        Cell(uint16_t size) : size(size) {
+        Cell(float size) : size(size) {
         }
 
         bool operator==(const Cell &) const = default;

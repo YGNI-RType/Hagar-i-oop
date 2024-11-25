@@ -17,7 +17,7 @@ void CellCollision::init(void) {
 
 void CellCollision::onGameLoop(geg::event::GameLoop &) {
     auto &transforms = getComponents<geg::component::Transform2D>();
-    auto &hitboxs = getComponents<geg::component::HitBoxCircle2D>();
+    auto &hitboxs = getComponents<geg::component::io::Circle>();
 
     for (auto [entity, tranform, hitbox]: gengine::Zip(transforms, hitboxs)) {
         for (auto [entity2, tranform2, hitbox2]: gengine::Zip(transforms, hitboxs)) {
@@ -26,8 +26,8 @@ void CellCollision::onGameLoop(geg::event::GameLoop &) {
 
             double distance = sqrt(pow(tranform.pos.x - tranform2.pos.x, 2) + pow(tranform.pos.y - tranform2.pos.y, 2));
 
-            double r1 = hitbox.radius;
-            double r2 = hitbox2.radius;
+            double r1 = hitbox.r;
+            double r2 = hitbox2.r;
             double totalRadius = r1 + r2;
 
             if (distance >= totalRadius)
@@ -47,9 +47,9 @@ void CellCollision::onGameLoop(geg::event::GameLoop &) {
             double coverage2 = (intersectionArea / area2) * 100.0;
 
             if (r1 > r2)
-                publishEvent(event::CellCollision(r1, r2, coverage2));
+                publishEvent(event::CellCollision(entity, entity2, coverage2));
             else
-                publishEvent(event::CellCollision(r2, r1, coverage1));
+                publishEvent(event::CellCollision(entity2, entity, coverage1));
         }
     }
 }

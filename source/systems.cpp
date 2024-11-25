@@ -16,6 +16,7 @@
 
 #include "systems/CellManager.hpp"
 #include "systems/InputToGameEvent.hpp"
+#include "systems/CellCollision.hpp"
 #include "systems/Start.hpp"
 #include "Constants.hpp"
 
@@ -31,6 +32,7 @@ void GEngineDeclareSystems(Registry *r) {
 
     r->registerSystem<hiop::system::Start>();
     r->registerSystem<hiop::system::CellManager>();
+    r->registerSystem<hiop::system::CellCollision>();
     r->registerSystem<hiop::system::InputToGameEvent>();
 
 

@@ -30,9 +30,10 @@ static gengine::component::driver::output::Clr rdmColor(void) {
 
 void CellManager::spawnPlayer(gengine::interface::event::NewRemoteLocal &e) {
     spawnEntity(gengine::interface::component::RemoteLocal(e.uuid), geg::component::network::NetSend(),
-                component::Cell(20), geg::component::io::Drawable(20),
-                geg::component::io::Circle(20, RED),
-                geg::component::Transform2D(gengine::Vect2{50, 50}), gengine::component::Velocity2D());
+                component::Cell(20), geg::component::io::Drawable(20), geg::component::io::Circle(20, RED),
+                geg::component::Transform2D(
+                    gengine::Vect2{(rand() % (WINDOW_WIDTH - 10)) + 10.f, (rand() % (WINDOW_HEIGHT - 10)) + 10.f}),
+                gengine::component::Velocity2D());
 }
 
 void CellManager::movePlayer(gengine::interface::event::SharedEvent<event::UserCmd> &e) {
@@ -44,30 +45,31 @@ void CellManager::movePlayer(gengine::interface::event::SharedEvent<event::UserC
         if (remote.getUUIDBytes() != e.remoteUUID) // check if its the same remote (zip)
             continue;
 
+        float vel = 1 / player.size * 100;
         switch (e->mvState) {
         case event::UserCmd::MvState::LEFT:
-            velocity = {-5, 0};
+            velocity = {-vel, 0};
             break;
         case event::UserCmd::MvState::RIGHT:
-            velocity = {5, 0};
+            velocity = {vel, 0};
             break;
         case event::UserCmd::MvState::UP:
-            velocity = {0, -5};
+            velocity = {0, -vel};
             break;
         case event::UserCmd::MvState::DOWN:
-            velocity = {0, 5};
+            velocity = {0, vel};
             break;
         case event::UserCmd::MvState::UP_RIGHT:
-            velocity = {5, -5};
+            velocity = {vel, -vel};
             break;
         case event::UserCmd::MvState::UP_LEFT:
-            velocity = {-5, -5};
+            velocity = {-vel, -vel};
             break;
         case event::UserCmd::MvState::DOWN_RIGHT:
-            velocity = {5, 5};
+            velocity = {vel, vel};
             break;
         case event::UserCmd::MvState::DOWN_LEFT:
-            velocity = {-5, 5};
+            velocity = {-vel, vel};
             break;
         case event::UserCmd::MvState::STANDING:
             velocity = {0, 0};
@@ -86,8 +88,7 @@ void CellManager::spawnFoodCell(geg::event::GameLoop &e) {
         int size = rand() % 3 + 2;
         gengine::Vect2 pos = {rand() % WINDOW_WIDTH * 1.f, rand() % WINDOW_HEIGHT * 1.f};
         spawnEntity(geg::component::network::NetSend(), component::Cell(size), geg::component::io::Drawable(size),
-                    geg::component::io::Circle(size, std::move(rdmColor())),
-                    geg::component::Transform2D(pos));
+                    geg::component::io::Circle(size, std::move(rdmColor())), geg::component::Transform2D(pos));
     }
 }
 
@@ -97,18 +98,18 @@ void CellManager::updateSizes(geg::event::GameLoop &e) {
     auto &drawables = getComponents<geg::component::io::Drawable>();
 
     for (auto [entity, cell, circle, drawable] : gengine::Zip(cells, circles, drawables)) {
-        // cell.size -= cell.size * 0.00001;
+        cell.size -= cell.size * 0.00001;
         circle.r = cell.size;
         drawable = cell.size;
     }
 }
 
 void CellManager::handleCollision(event::CellCollision &e) {
-    if (e.ratio < 50)
-        return;
-    std::cout << e.ratio << std::endl;
+    // if (e.ratio > 20)
+    //     return;
 
     auto &cells = getComponents<component::Cell>();
+    std::cout << int(e.smaller) << " < " << e.bigger << std::endl;
     if (!(cells.contains(e.bigger) && cells.contains(e.smaller)))
         return;
     auto &bigger = cells.get(e.bigger);
@@ -116,6 +117,7 @@ void CellManager::handleCollision(event::CellCollision &e) {
 
     bigger.size += smaller.size;
     killEntity(e.smaller);
+    std::cout << int(e.smaller) << std::endl;
 }
 
 } // namespace hiop::system

@@ -13,6 +13,7 @@
 #include "exceptions/Base.hpp"
 
 int main(int argc, const char **argv) {
+    srand(time(NULL));
     std::string replayFile;
     for (int i = 0; i < argc; i++)
         if (!std::strcmp(argv[i], "--replay") && (i + 1) < argc)

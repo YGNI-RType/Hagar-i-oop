@@ -5,6 +5,8 @@
 ** Cell.hpp
 */
 
+#pragma once
+
 #include "GEngine/libdev/Components.hpp"
 
 namespace hiop::component {

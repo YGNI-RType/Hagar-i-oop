@@ -30,7 +30,8 @@ static gengine::component::driver::output::Clr rdmColor(void) {
 
 void CellManager::spawnPlayer(gengine::interface::event::NewRemoteLocal &e) {
     spawnEntity(gengine::interface::component::RemoteLocal(e.uuid), geg::component::network::NetSend(),
-                component::Cell(20), geg::component::io::Drawable(20), geg::component::io::Circle(20, RED),
+                component::Cell(20), geg::component::io::Drawable(20),
+                geg::component::io::Circle(20, std::move(rdmColor())),
                 geg::component::Transform2D(
                     gengine::Vect2{(rand() % (WINDOW_WIDTH - 10)) + 10.f, (rand() % (WINDOW_HEIGHT - 10)) + 10.f}),
                 gengine::component::Velocity2D());
@@ -105,11 +106,10 @@ void CellManager::updateSizes(geg::event::GameLoop &e) {
 }
 
 void CellManager::handleCollision(event::CellCollision &e) {
-    // if (e.ratio > 20)
-    //     return;
+    if (e.ratio < 25)
+        return;
 
     auto &cells = getComponents<component::Cell>();
-    std::cout << int(e.smaller) << " < " << e.bigger << std::endl;
     if (!(cells.contains(e.bigger) && cells.contains(e.smaller)))
         return;
     auto &bigger = cells.get(e.bigger);
@@ -117,7 +117,6 @@ void CellManager::handleCollision(event::CellCollision &e) {
 
     bigger.size += smaller.size;
     killEntity(e.smaller);
-    std::cout << int(e.smaller) << std::endl;
 }
 
 } // namespace hiop::system

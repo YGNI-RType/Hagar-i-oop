@@ -18,7 +18,7 @@ class InputToGameEvent: public gengine::System<InputToGameEvent>, public gengine
 public:
     void init(void) override;
 
-    void moveUp(gengine::system::driver::input::KeyUEvent &e);
+    void moveUp(gengine::system::driver::input::KeyUpEvent &e);
     void moveLeft(gengine::system::driver::input::KeyLeftEvent &e);
     void moveDown(gengine::system::driver::input::KeyDownEvent &e);
     void moveRight(gengine::system::driver::input::KeyRightEvent &e);

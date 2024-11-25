@@ -15,6 +15,7 @@ void CellManager::init(void) {
     subscribeToEvent<geg::event::GameLoop>(&CellManager::updateSizes);
     subscribeToEvent<geg::event::GameLoop>(&CellManager::spawnFoodCell);
     subscribeToEvent<event::CellCollision>(&CellManager::handleCollision);
+    subscribeToEvent<gengine::interface::event::SharedEvent<event::UserCmd>>(&CellManager::movePlayer);
 }
 
 static gengine::component::driver::output::Clr rdmColor(void) {
@@ -31,7 +32,48 @@ void CellManager::spawnPlayer(gengine::interface::event::NewRemoteLocal &e) {
     spawnEntity(gengine::interface::component::RemoteLocal(e.uuid), geg::component::network::NetSend(),
                 component::Cell(20), geg::component::io::Drawable(20),
                 geg::component::io::Circle(20, RED),
-                geg::component::Transform2D(gengine::Vect2{50, 50}));
+                geg::component::Transform2D(gengine::Vect2{50, 50}), gengine::component::Velocity2D());
+}
+
+void CellManager::movePlayer(gengine::interface::event::SharedEvent<event::UserCmd> &e) {
+    auto &velocities = getComponents<gengine::component::Velocity2D>();
+    auto &players = getComponents<component::Cell>();
+    auto &remotes = getComponents<gengine::interface::component::RemoteLocal>();
+
+    for (auto [entity, remote, player, velocity] : gengine::Zip(remotes, players, velocities)) {
+        if (remote.getUUIDBytes() != e.remoteUUID) // check if its the same remote (zip)
+            continue;
+
+        switch (e->mvState) {
+        case event::UserCmd::MvState::LEFT:
+            velocity = {-5, 0};
+            break;
+        case event::UserCmd::MvState::RIGHT:
+            velocity = {5, 0};
+            break;
+        case event::UserCmd::MvState::UP:
+            velocity = {0, -5};
+            break;
+        case event::UserCmd::MvState::DOWN:
+            velocity = {0, 5};
+            break;
+        case event::UserCmd::MvState::UP_RIGHT:
+            velocity = {5, -5};
+            break;
+        case event::UserCmd::MvState::UP_LEFT:
+            velocity = {-5, -5};
+            break;
+        case event::UserCmd::MvState::DOWN_RIGHT:
+            velocity = {5, 5};
+            break;
+        case event::UserCmd::MvState::DOWN_LEFT:
+            velocity = {-5, 5};
+            break;
+        case event::UserCmd::MvState::STANDING:
+            velocity = {0, 0};
+            break;
+        }
+    }
 }
 
 void CellManager::spawnFoodCell(geg::event::GameLoop &e) {

@@ -10,7 +10,7 @@
 namespace hiop::system {
 void InputToGameEvent::init(void) {
     subscribeToEvent<gengine::system::event::GameLoop>(&InputToGameEvent::sendEvents);
-    subscribeToEvent<gengine::system::driver::input::KeyUEvent>(&InputToGameEvent::moveUp);
+    subscribeToEvent<gengine::system::driver::input::KeyUpEvent>(&InputToGameEvent::moveUp);
     subscribeToEvent<gengine::system::driver::input::KeyLeftEvent>(&InputToGameEvent::moveLeft);
     subscribeToEvent<gengine::system::driver::input::KeyDownEvent>(&InputToGameEvent::moveDown);
     subscribeToEvent<gengine::system::driver::input::KeyRightEvent>(&InputToGameEvent::moveRight);
@@ -30,7 +30,7 @@ void InputToGameEvent::shoot(gengine::system::driver::input::KeyWEvent &e) {
     }
 }
 
-void InputToGameEvent::moveUp(gengine::system::driver::input::KeyUEvent &e) {
+void InputToGameEvent::moveUp(gengine::system::driver::input::KeyUpEvent &e) {
     switch (e.state) {
     case geg::event::io::InputState::PRESSED:
         updateDirectionBitmask(event::UserCmd::MvState::UP, true);

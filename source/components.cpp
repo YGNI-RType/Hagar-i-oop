@@ -16,6 +16,7 @@ void GEngineDeclareComponents(Registry *r) {
     r->registerComponent<geg::component::io::Drawable>();
 
     r->registerComponent<geg::component::Transform2D>();
+    r->registerComponent<geg::component::Velocity2D>();
 
     r->registerComponent<hiop::component::Cell>();
 

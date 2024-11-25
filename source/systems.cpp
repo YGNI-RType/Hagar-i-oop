@@ -15,6 +15,7 @@
 #include "GEngine/interface/network/systems/ClientServer.hpp"
 
 #include "systems/CellManager.hpp"
+#include "InputToGameEvent.hpp"
 #include "Constants.hpp"
 
 void GEngineDeclareSystems(Registry *r) {
@@ -23,7 +24,12 @@ void GEngineDeclareSystems(Registry *r) {
     r->registerSystem<geg::system::io::Draw>();
     r->registerSystem<geg::system::io::DrawCircle>();
 
+    r->registerSystem<geg::system::Motion2D>();
+
+
+
     r->registerSystem<hiop::system::CellManager>();
+    r->registerSystem<hiop::system::InputToGameEvent>();
 
 
     r->registerSystem<gengine::interface::network::system::ConnectAtStart>("127.0.0.1", 4242);

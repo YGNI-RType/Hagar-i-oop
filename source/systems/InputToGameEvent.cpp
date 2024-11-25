@@ -70,7 +70,7 @@ void InputToGameEvent::moveDown(gengine::system::driver::input::KeyDownEvent &e)
 }
 
 void InputToGameEvent::sendEvents(gengine::system::event::GameLoop &e) {
-    publishEvent(event::UserCmd(getMovementState(), m_shootState, event::UserCmd::SplitState::SPLIT_NONE)); // TODO add split
+    publishEvent(event::UserCmd(getMovementState(), m_shootState, event::UserCmd::SplitState::SPLIT_NONE, getSystem<Start>().pseudo)); // TODO add split
 }
 
 void InputToGameEvent::moveRight(gengine::system::driver::input::KeyRightEvent &e) {

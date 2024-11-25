@@ -15,10 +15,14 @@ struct UserCmd: public gengine::Event {
     enum ShootState { SHOOT_NONE = 0, SHOOT} shootState;
     enum SplitState { SPLIT_NONE = 0, SPLIT} splitState;
 
-    UserCmd(MvState mvState, ShootState shootState, SplitState splitState)
+    char pseudo[16];
+
+    UserCmd(MvState mvState, ShootState shootState, SplitState splitState, const std::string &_pseudo)
         : mvState(mvState)
         , shootState(shootState)
         , splitState(splitState) {
+        memset(pseudo, 0, sizeof(pseudo));
+        memcpy(pseudo, _pseudo.c_str(), _pseudo.size());
     }
 };
 }

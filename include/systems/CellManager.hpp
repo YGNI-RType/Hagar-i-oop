@@ -20,7 +20,7 @@
 #define MAX_FOOD 100
 
 namespace hiop::system {
-class CellManager : public gengine::System<CellManager, component::Cell, geg::component::io::Circle, geg::component::io::Drawable, geg::component::Velocity2D, gengine::interface::component::RemoteLocal>, public gengine::RemoteSystem {
+class CellManager : public gengine::System<CellManager, component::Cell, geg::component::io::Circle, geg::component::io::Drawable, geg::component::Velocity2D, gengine::interface::component::RemoteLocal, gengine::component::driver::output::Text>, public gengine::RemoteSystem {
 public:
     CellManager() = default;
     ~CellManager() = default;

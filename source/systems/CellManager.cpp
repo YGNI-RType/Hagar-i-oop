@@ -34,17 +34,20 @@ void CellManager::spawnPlayer(gengine::interface::event::NewRemoteLocal &e) {
                 geg::component::io::Circle(20, std::move(rdmColor())),
                 geg::component::Transform2D(
                     gengine::Vect2{(rand() % (WINDOW_WIDTH - 10)) + 10.f, (rand() % (WINDOW_HEIGHT - 10)) + 10.f}),
-                gengine::component::Velocity2D());
+                gengine::component::Velocity2D(), gengine::component::driver::output::Text("arcade.ttf", ""));
 }
 
 void CellManager::movePlayer(gengine::interface::event::SharedEvent<event::UserCmd> &e) {
     auto &velocities = getComponents<gengine::component::Velocity2D>();
     auto &players = getComponents<component::Cell>();
     auto &remotes = getComponents<gengine::interface::component::RemoteLocal>();
+    auto &texts = getComponents<gengine::component::driver::output::Text>();
 
-    for (auto [entity, remote, player, velocity] : gengine::Zip(remotes, players, velocities)) {
+    for (auto [entity, remote, player, velocity, text] : gengine::Zip(remotes, players, velocities, texts)) {
         if (remote.getUUIDBytes() != e.remoteUUID) // check if its the same remote (zip)
             continue;
+
+        text.str = e->pseudo;
 
         float vel = 1 / player.size * 100;
         switch (e->mvState) {
@@ -106,7 +109,7 @@ void CellManager::updateSizes(geg::event::GameLoop &e) {
 }
 
 void CellManager::handleCollision(event::CellCollision &e) {
-    if (e.ratio < 25)
+    if (e.ratio < 50)
         return;
 
     auto &cells = getComponents<component::Cell>();

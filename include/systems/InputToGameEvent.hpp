@@ -11,10 +11,11 @@
 #include "events/UserCmd.hpp"
 #include "GEngine/libdev/systems/driver/input/KeyboardCatcher.hpp"
 #include "GEngine/libdev/Events.hpp"
+#include "systems/Start.hpp"
 
 
 namespace hiop::system {
-class InputToGameEvent: public gengine::System<InputToGameEvent>, public gengine::LocalSystem {
+class InputToGameEvent: public gengine::System<InputToGameEvent, Start>, public gengine::LocalSystem {
 public:
     void init(void) override;
 

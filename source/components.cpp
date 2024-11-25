@@ -12,6 +12,7 @@
 #include "components/Cell.hpp"
 
 #include "GEngine/libdev/components/driver/output/Sound.hpp"
+#include "GEngine/libdev/components/driver/output/Text.hpp"
 
 void GEngineDeclareComponents(Registry *r) {
     r->registerComponent<geg::component::io::Circle>();
@@ -21,6 +22,8 @@ void GEngineDeclareComponents(Registry *r) {
     r->registerComponent<geg::component::Velocity2D>();
 
     r->registerComponent<hiop::component::Cell>();
+
+    r->registerComponent<gengine::component::driver::output::Text>();
 
 
     r->registerComponent<gengine::interface::component::RemoteLocal>();

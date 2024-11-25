@@ -20,6 +20,8 @@
 #include "systems/Start.hpp"
 #include "Constants.hpp"
 
+#include "GEngine/libdev/systems/driver/output/FontManager.hpp"
+
 void GEngineDeclareSystems(Registry *r) {
     r->registerSystem<geg::system::io::RenderWindow>(WINDOW_WIDTH, WINDOW_HEIGHT, "hagar-i-oop");
     r->registerSystem<geg::system::io::KeyboardCatcher>();
@@ -34,6 +36,7 @@ void GEngineDeclareSystems(Registry *r) {
     r->registerSystem<hiop::system::CellManager>();
     r->registerSystem<hiop::system::CellCollision>();
     r->registerSystem<hiop::system::InputToGameEvent>();
+    r->registerSystem<gengine::system::driver::output::DrawText>();
 
 
     r->registerSystem<gengine::interface::network::system::ConnectAtStart>("127.0.0.1", 4242);
@@ -49,4 +52,5 @@ void GEngineDeclareSystems(Registry *r) {
 
     r->registerSystem<gengine::system::driver::output::AudioManagerLocal>("../sounds", "../musics");
     r->registerSystem<gengine::system::driver::output::AudioManagerRemote>("../sounds", "../musics");
+    r->registerSystem<gengine::system::driver::output::FontManager>("../fonts");
 }

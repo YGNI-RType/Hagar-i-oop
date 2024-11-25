@@ -5,7 +5,7 @@
 ** CellCollision.cpp
 */
 
-#include "CellCollision.hpp"
+#include "systems/CellCollision.hpp"
 #include "GEngine/libdev/Component.hpp"
 #include "ecs/entity/Entity.hpp"
 #include <math.h>

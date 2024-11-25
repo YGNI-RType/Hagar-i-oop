@@ -15,7 +15,8 @@
 #include "GEngine/interface/network/systems/ClientServer.hpp"
 
 #include "systems/CellManager.hpp"
-#include "InputToGameEvent.hpp"
+#include "systems/InputToGameEvent.hpp"
+#include "systems/Start.hpp"
 #include "Constants.hpp"
 
 void GEngineDeclareSystems(Registry *r) {
@@ -28,6 +29,7 @@ void GEngineDeclareSystems(Registry *r) {
 
 
 
+    r->registerSystem<hiop::system::Start>();
     r->registerSystem<hiop::system::CellManager>();
     r->registerSystem<hiop::system::InputToGameEvent>();
 
@@ -42,4 +44,7 @@ void GEngineDeclareSystems(Registry *r) {
     >();
     r->registerSystem<gengine::interface::system::HandleRemoteLocal>();
     r->registerSystem<gengine::interface::system::HandleLocal>();
+
+    r->registerSystem<gengine::system::driver::output::AudioManagerLocal>("../sounds", "../musics");
+    r->registerSystem<gengine::system::driver::output::AudioManagerRemote>("../sounds", "../musics");
 }

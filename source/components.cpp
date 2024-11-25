@@ -11,6 +11,8 @@
 
 #include "components/Cell.hpp"
 
+#include "GEngine/libdev/components/driver/output/Sound.hpp"
+
 void GEngineDeclareComponents(Registry *r) {
     r->registerComponent<geg::component::io::Circle>();
     r->registerComponent<geg::component::io::Drawable>();
@@ -23,4 +25,7 @@ void GEngineDeclareComponents(Registry *r) {
 
     r->registerComponent<gengine::interface::component::RemoteLocal>();
     r->registerComponent<geg::component::network::NetSend>();
+
+    r->registerComponent<gengine::component::driver::output::Music>();
+    r->registerComponent<gengine::component::driver::output::Sound>();
 }

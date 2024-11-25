@@ -5,7 +5,7 @@
 ** InputToGame.hpp
 */
 
-#include "InputToGameEvent.hpp"
+#include "systems/InputToGameEvent.hpp"
 
 namespace hiop::system {
 void InputToGameEvent::init(void) {

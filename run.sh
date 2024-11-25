@@ -12,7 +12,7 @@ fi
 
 echo "Running server..."
 mkfifo pipe
-./r-type_server > pipe &
+./hiop_server > pipe &
 SERVER_PID=$!
 tee server_output.log < pipe &
 TEE_PID=$!
@@ -32,7 +32,7 @@ trap cleanup SIGINT
 sleep 1
 
 echo "Running client..."
-./r-type_client
+./hiop_client
 
 kill $SERVER_PID 2>/dev/null
 kill $TEE_PID 2>/dev/null

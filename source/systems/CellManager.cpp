@@ -16,6 +16,8 @@ void CellManager::init(void) {
     subscribeToEvent<geg::event::GameLoop>(&CellManager::spawnFoodCell);
     subscribeToEvent<event::CellCollision>(&CellManager::handleCollision);
     subscribeToEvent<gengine::interface::event::SharedEvent<event::UserCmd>>(&CellManager::movePlayer);
+    subscribeToEvent<gengine::interface::event::SharedEvent<event::UserCmd>>(&CellManager::setPseudo);
+    subscribeToEvent<geg::event::GameLoop>(&CellManager::onGameLoop);
 }
 
 static gengine::component::driver::output::Clr rdmColor(void) {
@@ -28,26 +30,57 @@ static gengine::component::driver::output::Clr rdmColor(void) {
     return color;
 }
 
+void CellManager::setPseudo(gengine::interface::event::SharedEvent<event::UserCmd> &e) {
+    auto &texts = getComponents<gengine::component::driver::output::Text>();
+    auto &remotes = getComponents<gengine::interface::component::RemoteLocal>();
+
+    for (auto [_, text, remote]: gengine::Zip(texts, remotes)) {
+        if (remote == e.remoteUUID) {
+            text.str = e->pseudo;
+        }
+    }
+}
+
+void CellManager::onGameLoop(geg::event::GameLoop &e) {
+    auto &transforms = getComponents<geg::component::Transform2D>();
+    auto &texts = getComponents<gengine::component::driver::output::Text>();
+    auto &remotes = getComponents<gengine::interface::component::RemoteLocal>();
+    auto &circles = getComponents<geg::component::io::Circle>();
+    auto &drawbles = getComponents<geg::component::io::Drawable>();
+    auto &cells = getComponents<component::Cell>();
+
+    for (auto [entity, tranform, text, remote, drawable]: gengine::Zip(transforms, texts, remotes, drawbles)) {
+        for (auto [entity2, tranform2, circle, remote2, cell]: gengine::Zip(transforms, circles, remotes, cells)) {
+            if (remote != remote)
+                continue;
+            tranform.pos.y = tranform2.pos.y;
+            tranform.pos.x = tranform2.pos.x - (circle.r / 2);
+            drawable = cell.size + 1;
+        }
+    }
+}
+
 void CellManager::spawnPlayer(gengine::interface::event::NewRemoteLocal &e) {
+    gengine::Vect2 vPos{(rand() % (WINDOW_WIDTH - 10)) + 10.f, (rand() % (WINDOW_HEIGHT - 10)) + 10.f};
     spawnEntity(gengine::interface::component::RemoteLocal(e.uuid), geg::component::network::NetSend(),
                 component::Cell(20), geg::component::io::Drawable(20),
                 geg::component::io::Circle(20, std::move(rdmColor())),
-                geg::component::Transform2D(
-                    gengine::Vect2{(rand() % (WINDOW_WIDTH - 10)) + 10.f, (rand() % (WINDOW_HEIGHT - 10)) + 10.f}),
-                gengine::component::Velocity2D(), gengine::component::driver::output::Text("arcade.ttf", ""));
+                geg::component::Transform2D(vPos),
+                gengine::component::Velocity2D());
+    spawnEntity(gengine::interface::component::RemoteLocal(e.uuid), geg::component::network::NetSend(),
+                gengine::component::driver::output::Text("arcade.ttf", "jkldsfdflskd"),
+                geg::component::io::Drawable(20),
+                geg::component::Transform2D(vPos));
 }
 
 void CellManager::movePlayer(gengine::interface::event::SharedEvent<event::UserCmd> &e) {
     auto &velocities = getComponents<gengine::component::Velocity2D>();
     auto &players = getComponents<component::Cell>();
     auto &remotes = getComponents<gengine::interface::component::RemoteLocal>();
-    auto &texts = getComponents<gengine::component::driver::output::Text>();
 
-    for (auto [entity, remote, player, velocity, text] : gengine::Zip(remotes, players, velocities, texts)) {
+    for (auto [entity, remote, player, velocity] : gengine::Zip(remotes, players, velocities)) {
         if (remote.getUUIDBytes() != e.remoteUUID) // check if its the same remote (zip)
             continue;
-
-        text.str = e->pseudo;
 
         float vel = 1 / player.size * 100;
         switch (e->mvState) {

@@ -36,37 +36,32 @@ This process uses vcpkg to install the required dependencies and CMake to handle
 Once compiled, the game requires both a server and a client to run. To start the server, and then the client, use the following commands in the build folder:
 
 ```bash
-./r-type_server
+./hiop_server
 ```
 
 In an other terminal:
 
 ```bash
-./r-type_server
+./hiop_client
 ```
-
-Alternatively, you can use the run.sh script located at the root of the repository to automatically start both the server and the client in one terminal session:
-
 ## GEngine integration
 
-R-Type leverages our internally developed GEngine, which provides the ECS architecture, along with various components and systems such as:
+Hagar-i-oop leverages our internally developed GEngine, which provides the ECS architecture, along with various components and systems such as:
 
 ### Components
 
     •	Drawable
-    •	Sprites
+    •	Circles
     •	Texts
-    •	Animations
     •	Transform and velocity
-    •	Hitboxes
+    •	Music
 
 ### Systems
 
-    •	AnimationManager
-    •	Collisions
     •	Keyboard input handling
     •	RenderWindow
     •	Motion mechanics
+    •	Music
 
 GEngine is automatically downloaded and compiled with the cmake .. command.
 
@@ -76,16 +71,13 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE.txt)
 
 ## Authors
 
-- Adrien AUDIARD
 - Antoine ESMAN
 - Basile FOUQUET
-- Nathan FLATTIN
-- Thomas POMMIER
 
 ## Useful Links
 
 [GEngine Github Repository](https://github.com/YGNI-RType/GEngine)
 
-[R-Type Wikipedia](https://en.wikipedia.org/wiki/R-Type)
+[Agar.io Wikipedia](https://fr.wikipedia.org/wiki/Agar.io)
 
-[R-Type in a browser](https://www.retrogames.cc/arcade-games/r-type-us.html)
+[Agar.io in your browser](https://agar.io/#ffa)
